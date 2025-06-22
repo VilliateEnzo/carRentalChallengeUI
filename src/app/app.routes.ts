@@ -1,9 +1,14 @@
 import { Routes } from '@angular/router';
-import { HomeLayout } from './presentation/home/home-layout/home-layout';
+import { authGuard } from './application/guards/auth.guard';
 
 export const routes: Routes = [
     {
         path: '',
         loadChildren:  () => import('./presentation/home/home.routes').then(m => m.HOME_ROUTES)
+    },
+    {
+        path: 'dashboard',
+        loadChildren:  () => import('./presentation/dashboard/dashboard.routes').then(m => m.DASHBOARD_ROUTES),
+        canActivate: [authGuard],
     },
 ];

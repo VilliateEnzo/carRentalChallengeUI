@@ -6,8 +6,9 @@ import { MatInputModule } from '@angular/material/input';
 import {MatButtonModule} from '@angular/material/button';
 import { InputTextComponent } from '../../shared/forms/input-text/input-text';
 import { AuthService } from '../../../application/services/auth.service';
-import { User } from '../../../domain/User';
 import { LoginRequest } from '../../../domain/RequestModels/LoginRequest';
+import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -25,7 +26,10 @@ import { LoginRequest } from '../../../domain/RequestModels/LoginRequest';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Login {
-  authService: AuthService = inject(AuthService);
+  private authService: AuthService = inject(AuthService);
+  private toastr: ToastrService = inject(ToastrService);
+  private router: Router = inject(Router)
+
   form: FormGroup = inject(FormBuilder).group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]]
@@ -40,22 +44,22 @@ export class Login {
   }  
 
   onSubmit(): void {
-    if (this.form.valid) {
-      const loginRequest: LoginRequest = {
-        email: this.emailControl.value,
-        password: this.passwordControl.value
-      };
-
-      this.authService.login(loginRequest).subscribe({
-        next: () => {
-          console.log('Login successful!');
-        },
-        error: (err) => {
-          console.error('Login failed:', err);
-        }
-    });
-    } else {
+    if (this.form.invalid) {
       this.form.markAllAsTouched();
+      return;
     }
+
+    const loginRequest: LoginRequest = this.form.value;
+
+    this.authService.login(loginRequest).subscribe({
+      next: () => {
+        this.toastr.success('Login successful!');
+        this.router.navigate(['/dashboard']);
+      },
+      error: (err) => {
+        const errorMessage = typeof err === 'string' ? err : 'Login failed';
+        this.toastr.error(errorMessage);
+      }
+    });
   }
 }

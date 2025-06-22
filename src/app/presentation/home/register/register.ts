@@ -8,6 +8,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { InputTextComponent } from '../../shared/forms/input-text/input-text';
+import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -24,7 +26,10 @@ import { InputTextComponent } from '../../shared/forms/input-text/input-text';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Register {
-  authService: AuthService = inject(AuthService);
+  private authService: AuthService = inject(AuthService);
+  private toastr: ToastrService = inject(ToastrService);
+  private router: Router = inject(Router)
+  
   form: FormGroup = inject(FormBuilder).group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]],
@@ -54,25 +59,21 @@ export class Register {
   }  
 
   onSubmit(): void {
-    if (this.form.valid) {
-      const registerRequest: RegisterRequest = {
-        email: this.emailControl.value,
-        password: this.passwordControl.value,
-        firstName: this.firstNameControl.value,
-        lastName: this.lastNameControl.value,
-        address: this.addressControl.value
-      };
-
-      this.authService.register(registerRequest).subscribe({
-        next: () => {
-          console.log('register successful!');
-        },
-        error: (err) => {
-          console.error('register failed:', err);
-        }
-    });
-    } else {
+    if (this.form.invalid) {
       this.form.markAllAsTouched();
+      return;
     }
+
+    const registerRequest: RegisterRequest = this.form.value;
+
+    this.authService.registerAndLogin(registerRequest).subscribe({
+      next: () => {
+        this.toastr.success('Registered and logged in!');
+        this.router.navigate(['/dashboard']);
+      },
+      error: () => {
+        this.toastr.error('Registration or login failed.');
+      }
+    });
   }
 }
