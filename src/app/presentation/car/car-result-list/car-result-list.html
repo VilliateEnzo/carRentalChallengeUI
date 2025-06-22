@@ -1,0 +1,12 @@
+@if (cars().length > 0) {
+    <div fxLayout="row wrap" fxLayoutGap="16px">
+        @for (car of cars(); track $index) {
+          <app-car-result-list-card [car]="car" />
+        }
+      </div>      
+}
+@else {
+    <div>
+        <p>No cars available. Try adjusting your filters above.</p>
+    </div>  
+}

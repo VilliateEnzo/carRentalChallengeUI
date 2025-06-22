@@ -1,0 +1,38 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" fxLayout="column" fxLayoutGap="16px">
+    <app-input-text label="Address" [control]="addressControl" type="text" />
+    <div fxLayout="row" fxLayoutGap="16px" fxFlexFill>
+        <mat-form-field appearance="fill" fxFlex>
+            <mat-label>Start Date</mat-label>
+            <input matInput [matDatepicker]="startPicker" formControlName="startDate" />
+            <mat-datepicker-toggle matSuffix [for]="startPicker" />
+            <mat-datepicker #startPicker />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" fxFlex>
+            <mat-label>End Date</mat-label>
+            <input matInput [matDatepicker]="endPicker" formControlName="endDate" />
+            <mat-datepicker-toggle matSuffix [for]="endPicker" />
+            <mat-datepicker #endPicker />
+        </mat-form-field>
+    </div>
+
+    <mat-form-field class="mat-form-field-width" appearance="fill">
+        <mat-label>Car Type</mat-label>
+        <mat-select formControlName="carType">
+            @for (type of carTypes; track $index) {
+                <mat-option [value]="type">{{ type }}</mat-option>
+            }
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="mat-form-field-width" appearance="fill">
+        <mat-label>Car Brand</mat-label>
+        <mat-select formControlName="carBrand">
+            @for (brand of carBrands; track $index) {
+                <mat-option [value]="brand">{{ brand }}</mat-option>
+            }
+        </mat-select>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" type="submit">Search</button>
+</form>

@@ -18,12 +18,19 @@ export class AuthService {
   private baseUrl: string = environment.apiUrl;
   currentUser = signal<User | null>(null);
 
-  constructor() {}
+  constructor() {
+    if (this.isBrowser()){
+      const storedUser = localStorage.getItem('user');
+      if (storedUser) {
+        this.currentUser.set(JSON.parse(storedUser));
+      }
+    }
+  }
 
   login(model: LoginRequest): Observable<void> {
     return this.http.post<User>(`${this.baseUrl}/customers/login`, model).pipe(
       map(user => {
-        if (user) {
+        if (user && this.isBrowser()) {
           localStorage.setItem('user', JSON.stringify(user));
           this.currentUser.set(user);
         }
@@ -32,7 +39,9 @@ export class AuthService {
   }
 
   logout() : void {
-    localStorage.removeItem('user');
+    if (this.isBrowser()) {
+      localStorage.removeItem('user');
+    }
     this.currentUser.set(null);
     this.router.navigate(['']);
   }
@@ -45,5 +54,9 @@ export class AuthService {
     return this.register(model).pipe(
       switchMap(() => this.login({ email: model.email, password: model.password }))
     );
+  }
+
+  private isBrowser(): boolean {
+    return typeof window !== 'undefined' && typeof window.localStorage !== 'undefined';
   }
 }

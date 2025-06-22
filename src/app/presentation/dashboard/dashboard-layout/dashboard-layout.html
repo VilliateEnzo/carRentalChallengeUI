@@ -1,1 +1,8 @@
-<p>dashboard-layout works!</p>
+<div class="layout-dashboard" fxLayout="column" fxLayoutGap="24px">
+    <h1>Search for your ideal Car</h1>
+    <app-car-search-form (cars)="onCarsReceived($event)" />
+
+    <div style="margin-top: 24px;">
+        <app-car-result-list [cars]="cars()"></app-car-result-list>
+    </div>
+</div>
