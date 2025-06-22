@@ -1,0 +1,42 @@
+<div fxLayout="column" fxLayoutAlign="center center" class="register-wrapper">
+  <h1>Register</h1>
+
+  <form name="registerForm"
+    [formGroup]="form"
+    fxLayout="column"
+    fxLayoutGap="24px"
+    (ngSubmit)="onSubmit()">
+    
+    <app-input-text
+      label="Email"
+      type="email"
+      [control]="emailControl"
+    ></app-input-text>
+
+    <app-input-text
+      label="Password"
+      type="password"
+      [control]="passwordControl"
+    ></app-input-text>
+
+        <app-input-text
+      label="First Name"
+      type="text"
+      [control]="firstNameControl"
+    ></app-input-text>
+
+        <app-input-text
+      label="Last Name"
+      type="text"
+      [control]="lastNameControl"
+    ></app-input-text>
+
+        <app-input-text
+      label="Address"
+      type="text"
+      [control]="addressControl"
+    ></app-input-text>
+
+    <button mat-raised-button color="primary" type="submit">Register</button>
+  </form>
+</div>

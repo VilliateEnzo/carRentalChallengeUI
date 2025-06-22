@@ -11,7 +11,7 @@ import { FlexLayoutModule } from '@ngbracket/ngx-layout';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HomeLayout {
-  router = inject(Router)
+  router: Router = inject(Router)
 
   constructor() {}
 

@@ -1,33 +1,24 @@
-<div fxLayout="column" fxLayoutAlign="center center" class="login-wrapper" [formGroup]="form">
-    <h1>Login</h1>
-  
-    <form (ngSubmit)="onSubmit()" fxLayout="column" fxLayoutGap="24px" style="width: 300px;">
-      <mat-form-field appearance="fill">
-        <mat-label>Email</mat-label>
-        <input matInput formControlName="email" type="email" />
-        @if (form.get('email')?.hasError('required')) {
-            <mat-error>Email is required</mat-error>
-        }
-        @if (form.get('email')?.hasError('email')) {
-            <mat-error>
-                Invalid email format
-            </mat-error>
-        }
-      </mat-form-field>
-  
-      <mat-form-field appearance="fill">
-        <mat-label>Password</mat-label>
-        <input matInput formControlName="password" type="password" />
-        @if (form.get('password')?.hasError('required')) {
-            <mat-error>Password is required</mat-error>
-        }
-        @if (form.get('password')?.hasError('minlength')) {
-            <mat-error>
-                Password must be at least 6 characters
-              </mat-error>
-        }
-      </mat-form-field>
-  
-      <button mat-raised-button color="primary" type="submit">Login</button>
-    </form>
-  </div>
+<div fxLayout="column" fxLayoutAlign="center center" class="login-wrapper">
+  <h1>Login</h1>
+
+  <form name="loginForm"
+    [formGroup]="form"
+    fxLayout="column"
+    fxLayoutGap="24px"
+    (ngSubmit)="onSubmit()">
+    
+    <app-input-text
+      label="Email"
+      type="email"
+      [control]="emailControl"
+    ></app-input-text>
+
+    <app-input-text
+      label="Password"
+      type="password"
+      [control]="passwordControl"
+    ></app-input-text>
+
+    <button mat-raised-button color="primary" type="submit">Login</button>
+  </form>
+</div>
